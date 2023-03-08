@@ -22,7 +22,7 @@
         </p>
         <div class="max-h-32 overflow-y-auto">
           <div v-for="(item, key) in dataInput" :key="key" class="flex gap-4 pb-5">
-            <input v-model="item.name" type="text" class="border border-slate-900">
+            <input v-model="item.text" type="text" class="border border-slate-900">
             <button @click="remove(key)" class="py-2 px-5 bg-red-400 rounded">
               delete
             </button>
@@ -83,7 +83,7 @@
   </section>
   <section v-else-if="step === 3">
     <div class="grid grid-cols-12">
-      <img v-for="(_, key) in dataInput" :key="key" :src="storedImg.image" alt="" class="col-span-4">
+      <img v-for="(item, key) in dataInput" :key="key" :src="createSource(item.text)" alt="" class="col-span-4">
     </div>
   </section>
 </template>
@@ -109,7 +109,7 @@
   const data = ref([
     {
       id: '1',
-      image: img,
+      image: 'https://83f6-182-1-74-132.ap.ngrok.io/v1/coba?gravity=center&font=Arial&size=64&fill=%23FFFFFF&text=Hallo%20pus&x=0&y=0',
       active: false
     },
     {
@@ -152,7 +152,16 @@
   }
 
   const dataInput = ref([
-    {name: ''}
+    {text: ''}
   ])
+
+
+  // step 3
+
+  const url = 'https://83f6-182-1-74-132.ap.ngrok.io'
+
+  const createSource = (text) => {
+    return `${url}/v1/coba?gravity=center&font=Arial&size=64&fill=%23FFFFFF&text=${text}&x=0&y=0`
+  }
 
 </script>
