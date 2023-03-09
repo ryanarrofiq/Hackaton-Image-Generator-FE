@@ -67,6 +67,10 @@
             <label for="color">Font color: </label>
             <input @change="getColor($event)" type="color" id="color" name="color" :value="position.fontColor" class="">
           </div>
+          <div class="flex pt-5 gap-1">
+            <label for="color">Stroke color: </label>
+            <input @change="getStroke($event)" type="color" id="color" name="color" :value="position.strokeColor" class="">
+          </div>
           <div>
             <label for=""></label>
           </div>
@@ -97,8 +101,12 @@
 
 <script setup>
   import {ref} from 'vue'
+  import axios from 'axios'
   // import img from '../assets/7wsh.png'
   import config from '../../public/asset/config.json'
+
+  
+  const url = 'https://267d-114-125-94-123.ap.ngrok.io'
 
   // step 1
 
@@ -131,6 +139,16 @@
     step.value = 2
   }
 
+  axios.get(`${url}/v1/template`,{
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*'
+    }
+  })
+  .then((response) => {
+    return console.log(response)
+  })
+
   const data = ref(config)
 
 
@@ -149,6 +167,10 @@
     position.value.fontColor = event.target.value
   }
 
+  const getStroke = (event) => {
+    position.value.strokeColor = event.target.value
+  }
+
   const dataInput = ref([
     {text: ''}
   ])
@@ -156,10 +178,9 @@
 
   // step 3
 
-  const url = 'https://83f6-182-1-74-132.ap.ngrok.io'
-
   const createSource = (text) => {
-    return encodeURI(`${url}/v1/coba?gravity=${position.value.gravity}&font=${position.value.font}&size=${position.value.fontSize}&fill=${position.value.fontColor}&text=${text}&x=${position.value.x}&y=${position.value.y}`)
+    const uri = encodeURI(`${url}/v1/create-or-get/${storedImg.value.id}?gravity=${position.value.gravity}&font=${position.value.font}&size=${position.value.fontSize}&fill=${encodeURIComponent(position.value.fontColor.replace('#', ''))}&stroke=${position.value.strokeColor.replace('#', '')}&text=${text}&x=${position.value.x}&y=${position.value.y}`)
+    return uri
   }
 
 </script>
